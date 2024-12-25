@@ -82,9 +82,13 @@ const getHackathons = async () => {
       const date = tile.querySelector('.submission-period')?.textContent.trim();
       const prize = tile.querySelector('.prize-amount')?.textContent.trim();
       const participants = tile.querySelector('.participants strong')?.textContent.trim();
+      let image = tile.querySelector('.hackathon-thumbnail')?.getAttribute('src');
       const link = tile.querySelector('a')?.getAttribute('href');
-      
-      if (title && status && host && date && prize && participants && link) {
+      const location = tile.querySelector('.info-with-icon .info span')?.textContent.trim();
+      if (image?.startsWith('//')) {
+        image = `https:${image}`;
+      }
+      if (title && status && host && date && prize && participants && link && image && location) {
         hackathonData.push({
           title,
           status,
@@ -92,11 +96,13 @@ const getHackathons = async () => {
           date,
           prize,
           participants,
-          link // Construct the full URL
+          link ,
+          image,
+          location
         });
       }
     });
-    console.log(hackathonData.link);
+    console.log(hackathonData);
     return hackathonData;
   });
 
