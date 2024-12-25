@@ -1,9 +1,8 @@
-// Frontend (React with Material-UI):
 import React, { useState } from 'react';
 import { TextField, Button, Container, Typography, Box } from '@mui/material';
 import axios from 'axios';
 
-const LoginPage = () => {
+const LoginPage = ({ setIsLoggedIn }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
@@ -12,6 +11,9 @@ const LoginPage = () => {
         try {
             const response = await axios.post('http://localhost:5000/login', { email, password });
             setMessage(response.data.message);
+            // Assuming the backend returns a user object on successful login
+            localStorage.setItem('user', JSON.stringify(response.data.user));  // Store user info in localStorage
+            setIsLoggedIn(true);  // Update the parent component with login status
         } catch (error) {
             setMessage(error.response?.data?.message || 'Error logging in');
         }
