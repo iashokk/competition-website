@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import LoginPage from './LoginPage';
 import HomePage from './HomePage';
-
+import Dashboard from './Dashboard';
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -13,8 +13,9 @@ function App() {
 
   return (
     <div className="App">
-      {isLoggedIn ? <HomePage /> : <LoginPage setIsLoggedIn={setIsLoggedIn} />}
-      Hello
+     
+      <Dashboard />
+       {isLoggedIn ? <HomePage /> : <LoginPage setIsLoggedIn={setIsLoggedIn} />}
     </div>
   );
 }
