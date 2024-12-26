@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, Typography, Box, Button, Chip, Divider } from "@mui/material";
+import { Card, Typography, Box, Button, Chip, Divider , CardActions, CardContent} from "@mui/material";
 import TourOutlinedIcon from "@mui/icons-material/TourOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import LanguageIcon from "@mui/icons-material/Language";
@@ -18,44 +18,24 @@ const HomePage = () => {
   return (
     <div>
       <h1>Hackathons</h1>
-      {/* {hackathons.map((hackathonData, index) => (
-        <Card sx={{ minWidth: 275 }} key={index}>
-          <CardContent>
-            <Typography
-              gutterBottom
-              sx={{ color: "text.secondary", fontSize: 14 }}
-            >
-              {hackathonData.title}
-            </Typography>
-            <Typography variant="body2">{hackathonData.description}</Typography>
-          </CardContent>
-          <CardActions>
-            <Button
-              href={hackathonData.link}
-              target="_blank"
-              rel="noreferrer"
-              size="small"
-            >
-              Learn More
-            </Button>
-          </CardActions>
-        </Card>
-      ))} */}
+     {hackathons.map((hackathonData, index) => (
       <Card
         sx={{
           display: "flex",
           alignItems: "center",
           padding: 2,
           borderRadius: 2,
-          boxShadow: 3,
+          boxShadow: 0.5,
           maxWidth: 800,
           margin: "auto",
+          marginBottom: 4,
         }}
+        key={index}
       >
         {/* Left Section: Image */}
         <Box sx={{ width: 140, height: 140, marginRight: 2 }}>
           <img
-            src="https://via.placeholder.com/100" // Replace with your image URL
+            src={hackathonData.image} // Replace with your image URL
             alt="Hackathon"
             style={{ width: "100%", height: "100%", borderRadius: 8 }}
           />
@@ -64,7 +44,7 @@ const HomePage = () => {
         {/* Main Content */}
         <Box sx={{ flex: 1 }}>
           <Typography variant="h6" fontWeight="bold">
-            RAG 'n' ROLL Amp up Search with Snowflake & Mistral
+          {hackathonData.title}
           </Typography>
           <Box sx={{ marginTop: 1 }}>
             {/* First Row: 10 Days Left and Online */}
@@ -74,10 +54,10 @@ const HomePage = () => {
                 justifyContent: "space-between",
                 alignItems: "center", // Align vertically
                 marginBottom: 1,
-                marginRight: 4,
+                marginRight: 2,
               }}
             >
-              <Chip label="10 Days Left" size="medium" />
+              <Chip label={hackathonData.status} size="medium" />
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <LanguageIcon sx={{ marginRight: 1, fontSize: 18 }} />
                 <Typography
@@ -86,7 +66,7 @@ const HomePage = () => {
                   textAlign="right"
                   fontSize={14.5}
                 >
-                  Online
+                 {hackathonData.location}
                 </Typography>
               </Box>
             </Box>
@@ -100,11 +80,11 @@ const HomePage = () => {
               }}
             >
               <Typography variant="body2" fontWeight="bold" fontSize={14.5}>
-                $10,000 in prize
+                {hackathonData.prize} in Prize
               </Typography>
 
               <Typography variant="body2" textAlign="right" fontSize={14.5}>
-                1000 participants
+                {hackathonData.participants} Participants
               </Typography>
             </Box>
           </Box>
@@ -126,7 +106,7 @@ const HomePage = () => {
             }}
           >
             <TourOutlinedIcon sx={{ marginRight: 1, fontSize: 18 }} />
-            <Chip label="Snowflake" size="medium" />
+            <Chip label={hackathonData.host} size="medium" />
           </Box>
           <Box sx={{ display: "flex", alignItems: "center", marginTop: 2 }}>
             <CalendarTodayOutlinedIcon
@@ -137,7 +117,7 @@ const HomePage = () => {
               color="text.secondary"
               sx={{ marginTop: 1, fontSize: 14 }}
             >
-              Nov 12, 2024 - Jan 14, 2025
+              {hackathonData.date}
             </Typography>
           </Box>
           <Box sx={{ marginTop: 2, display: "flex", justifyContent: "center" }}>
@@ -145,14 +125,18 @@ const HomePage = () => {
               variant="contained"
               size="small"
               sx={{ marginTop: 1, borderRadius: 20 }}
-              href="#"
+              href={hackathonData.link}
+              target="_blank"
+              rel="noreferrer"
             >
               Register
             </Button>
           </Box>
         </Box>
       </Card>
+      ))}
     </div>
+    
   );
 };
 
