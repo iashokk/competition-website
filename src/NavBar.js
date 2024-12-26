@@ -14,6 +14,7 @@ import { alpha, styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
 import Stack from "@mui/material/Stack";
+import { useNavigate } from "react-router-dom";
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: 20,
@@ -68,7 +69,14 @@ function Navbar() {
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
+  const navigate = useNavigate();
 
+  const handleLoginClick = () => {
+    navigate("/signin");
+  };
+  const handleSignUpClick = () => {
+    navigate("/signup");
+  };
   return (
     <AppBar position="static">
       <Container maxWidth="xl" sx={{ backgroundColor: "white" }}>
@@ -185,8 +193,8 @@ function Navbar() {
           </Box>
           <Box sx={{ flexGrow: 0 }}>
             <Stack direction="row" spacing={2}>
-              <Button variant="outlined">Log in</Button>
-              <Button variant="contained">Sign up</Button>
+              <Button variant="outlined" onClick={handleLoginClick}>Log in</Button>
+              <Button variant="contained" onClick={handleSignUpClick}>Sign up</Button>
             </Stack>
           </Box>
         </Toolbar>
