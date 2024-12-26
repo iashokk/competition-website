@@ -14,6 +14,7 @@ function App() {
   return (
     <div className="App">
       {isLoggedIn ? <HomePage /> : <LoginPage setIsLoggedIn={setIsLoggedIn} />}
+      Hello
     </div>
   );
 }
