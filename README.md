@@ -1,6 +1,6 @@
 # Competition Website
 
-Welcome to the Competition Website! Here, you can find all the hackathon papers and presentations from various websites consolidated into one place.
+Welcome to the Competition Website! Here, you can find all the Hackathon ,Events and papers presentations from various websites consolidated into one place.
 ## Features
 
 - Consolidated Hackathon ,Events and papers presentations
@@ -48,4 +48,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Contact
 
-If you have any questions or suggestions, feel free to open an issue or contact us at [email@example.com](mailto:ashokkumaravel02@gmail.com).
+If you have any questions or suggestions, feel free to open an issue or contact us at [ashokkumaravel02@gmail.com](mailto:ashokkumaravel02@gmail.com).
