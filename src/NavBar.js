@@ -1,20 +1,26 @@
 import * as React from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
-import Container from "@mui/material/Container";
-import Button from "@mui/material/Button";
-import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
+import {
+  AppBar,
+  Box,
+  Toolbar,
+  IconButton,
+  Typography,
+  Menu,
+  Container,
+  Button,
+  MenuItem,
+  Stack,
+  InputBase,
+} from "@mui/material";
+import {
+  Menu as MenuIcon,
+  Adb as AdbIcon,
+  Search as SearchIcon,
+} from "@mui/icons-material";
 import { alpha, styled } from "@mui/material/styles";
-import InputBase from "@mui/material/InputBase";
-import SearchIcon from "@mui/icons-material/Search";
-import Stack from "@mui/material/Stack";
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: 20,
@@ -46,7 +52,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   width: "100%",
   "& .MuiInputBase-input": {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create("width"),
     [theme.breakpoints.up("sm")]: {
@@ -57,10 +62,18 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
   },
 }));
+
 const pages = ["Hackathons", "Paper Presentations", "Blog"];
 
 function Navbar() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    setIsLoggedIn(!!user);
+  }, []);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -69,14 +82,21 @@ function Navbar() {
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
-  const navigate = useNavigate();
 
   const handleLoginClick = () => {
     navigate("/signin");
   };
+
   const handleSignUpClick = () => {
     navigate("/signup");
   };
+
+  const handleLogoutClick = () => {
+    localStorage.removeItem("user");
+    setIsLoggedIn(false);
+    navigate("/signin");
+  };
+
   return (
     <AppBar position="static">
       <Container maxWidth="xl" sx={{ backgroundColor: "white" }}>
@@ -174,8 +194,6 @@ function Navbar() {
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
-                variant="h6"
-                fontWeight="bold"
                 key={page}
                 onClick={handleCloseNavMenu}
                 sx={{
@@ -193,8 +211,20 @@ function Navbar() {
           </Box>
           <Box sx={{ flexGrow: 0 }}>
             <Stack direction="row" spacing={2}>
-              <Button variant="outlined" onClick={handleLoginClick}>Log in</Button>
-              <Button variant="contained" onClick={handleSignUpClick}>Sign up</Button>
+              {isLoggedIn ? (
+                <Button variant="outlined" onClick={handleLogoutClick}>
+                  Log out
+                </Button>
+              ) : (
+                <>
+                  <Button variant="outlined" onClick={handleLoginClick}>
+                    Log in
+                  </Button>
+                  <Button variant="contained" onClick={handleSignUpClick}>
+                    Sign up
+                  </Button>
+                </>
+              )}
             </Stack>
           </Box>
         </Toolbar>
@@ -202,4 +232,5 @@ function Navbar() {
     </AppBar>
   );
 }
+
 export default Navbar;

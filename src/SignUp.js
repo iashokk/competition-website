@@ -1,18 +1,21 @@
-import * as React from "react";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import Divider from "@mui/material/Divider";
-import FormLabel from "@mui/material/FormLabel";
-import FormControl from "@mui/material/FormControl";
-import Link from "@mui/material/Link";
-import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
-import Stack from "@mui/material/Stack";
-import MuiCard from "@mui/material/Card";
+import React, { useState } from "react";
+import {
+  Box,
+  Button,
+  CssBaseline,
+  Divider,
+  FormLabel,
+  FormControl,
+  Link,
+  TextField,
+  Typography,
+  Stack,
+  Card as MuiCard,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 import axios from "axios";
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
@@ -55,30 +58,33 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
   },
 }));
 
-export default function SignUp(props) {
- 
+export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const [name, setName] = useState("");
+  const navigate = useNavigate();
 
-  const handleRegister = async () => {
+  const handleRegister = async (e) => {
+    e.preventDefault();
     try {
-        const response = await axios.post('http://localhost:5000/register', {name, email, password });
-        setMessage(response.data.message);
-        console.log(response.data.message);
+      const response = await axios.post("http://localhost:5000/register", {
+        name,
+        email,
+        password,
+      });
+      setMessage(response.data.message);
+      navigate("/signin");
     } catch (error) {
-        setMessage(error.response?.data?.message || 'Error registering');
+      setMessage(error.response?.data?.message || "Error registering");
     }
-};
+  };
 
   return (
     <Box>
       <CssBaseline enableColorScheme />
-
       <SignUpContainer direction="column" justifyContent="space-between">
         <Card variant="outlined">
-          Logo
           <Typography
             component="h1"
             variant="h4"
@@ -89,6 +95,7 @@ export default function SignUp(props) {
           <Box
             component="form"
             sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+            onSubmit={handleRegister}
           >
             <FormControl>
               <FormLabel htmlFor="name">Full name</FormLabel>
@@ -128,17 +135,11 @@ export default function SignUp(props) {
                 id="password"
                 autoComplete="new-password"
                 variant="outlined"
-              
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </FormControl>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              onClick={handleRegister}
-            >
+            <Button type="submit" fullWidth variant="contained">
               Sign up
             </Button>
           </Box>
@@ -148,11 +149,7 @@ export default function SignUp(props) {
           <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
             <Typography sx={{ textAlign: "center" }}>
               Already have an account?{" "}
-              <Link
-                href="/material-ui/getting-started/templates/sign-in/"
-                variant="body2"
-                sx={{ alignSelf: "center" }}
-              >
+              <Link href="/signin" variant="body2" sx={{ alignSelf: "center" }}>
                 Sign in
               </Link>
             </Typography>
