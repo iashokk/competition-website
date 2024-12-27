@@ -162,7 +162,6 @@ function Navbar() {
                     fontWeight="bold"
                     sx={{
                       textAlign: "center",
-                      backgroundColor: "black",
                       fontWeight: 700,
                     }}
                   >
