@@ -16,6 +16,7 @@ import { styled } from '@mui/material/styles';
 import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import DottedLine from '@mui/icons-material/MoreHoriz'; // Importing an icon for the dotted line
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -27,6 +28,9 @@ const Card = styled(MuiCard)(({ theme }) => ({
   margin: 'auto',
   boxShadow:
     'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px',
+  zIndex: 1, // Ensure the form is in front
+  backgroundColor: theme.palette.background.paper,
+  borderRadius: theme.shape.borderRadius,
   [theme.breakpoints.up('sm')]: {
     width: '450px',
   },
@@ -37,9 +41,13 @@ const Card = styled(MuiCard)(({ theme }) => ({
 }));
 
 const SignInContainer = styled(Stack)(({ theme }) => ({
-  height: 'calc((1 - var(--template-frame-height, 0)) * 100dvh)',
+  height: '100vh',
   minHeight: '100%',
   padding: theme.spacing(2),
+  backgroundColor: 'white',
+  backgroundImage: 'url(/Background.png)',
+  position: 'relative',
+  backgroundSize: 'cover',
   [theme.breakpoints.up('sm')]: {
     padding: theme.spacing(4),
   },
@@ -49,13 +57,34 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
     position: 'absolute',
     zIndex: -1,
     inset: 0,
-    backgroundImage:
-      'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
-    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',  // To cover the entire container with the image
+    backgroundPosition: 'center', // Center the image in the container
+    backgroundRepeat: 'no-repeat', // Ensure the image doesn’t repeat
     ...theme.applyStyles('dark', {
       backgroundImage:
-        'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))',
+        'url(/Background.png)'
     }),
+  },
+}));
+
+
+const DottedBackground = styled(Box)(({ theme }) => ({
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  width: '100%',
+  height: '100%',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  zIndex: -1,
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    backgroundImage: 'radial-gradient(circle, rgba(0,0,0,0.1) 1px, transparent 1px)',
+    backgroundSize: '20px 20px',
   },
 }));
 
@@ -82,6 +111,9 @@ const SignIn = ({ setIsLoggedIn }) => {
     <Box>
       <CssBaseline enableColorScheme />
       <SignInContainer direction="column" justifyContent="space-between">
+        <DottedBackground>
+          <DottedLine fontSize="large" />
+        </DottedBackground>
         <Card variant="outlined">
           Logo
           <Typography
