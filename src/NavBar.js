@@ -67,7 +67,7 @@ const pages = [
   { label: "Hackathons", path: "/hackathons" },
   { label: "Paper Presentations", path: "/paper-presentations" },
   { label: "Mentors", path: "/mentors" },
-  { label: "Blog", path: "/blog" },
+  { label: "Blog", path: "/blogs" },
 ];
 
 function Navbar() {
