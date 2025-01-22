@@ -8,6 +8,7 @@ import NoSignIn from "./NoSignIn";
 import Homepage from "./HomePage";
 import Mentors from "./Mentors";
 import Blogs from "./Blogs";
+import Webinar from "./Webinar";
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true); // New loading state
@@ -49,6 +50,14 @@ function App() {
             element={
               <ProtectedRoute isLoggedIn={isLoggedIn}>
                 <Blogs/>
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/webinars"
+            element={
+              <ProtectedRoute isLoggedIn={isLoggedIn}>
+                <Webinar/>
               </ProtectedRoute>
             }
           />

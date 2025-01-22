@@ -171,7 +171,8 @@ const getBlogs = async () => {
 
   // Navigate to the Devpost blog page
   await page.goto('https://info.devpost.com/blog', { waitUntil: 'networkidle0' });
-
+  
+  // Scrape mentor data
   // Scrape blog data
   const blogs = await page.evaluate(() => {
     const blogData = [];
@@ -210,6 +211,77 @@ app.get('/api/blogs', async (req, res) => {
     res.status(500).json({ message: 'Error fetching blogs', error: err.message });
   }
 });
+
+//webinars 
+
+const getWebinars = async () => {
+  const browser = await puppeteer.launch({ headless: true });
+  const page = await browser.newPage();
+  await page.goto('https://www.mygreatlearning.com/webinars', { waitUntil: 'networkidle2', timeout: 60000 });
+
+  try {
+    // Wait for the '.each-card' elements to appear with a timeout
+    await page.waitForSelector('.each-card', { timeout: 30000 });
+    console.log("Elements found");
+  } catch (err) {
+    console.error('Error: Element not found or taking too long to load:', err);
+    await browser.close();
+    return [];
+  }
+
+  // Debug: Check if any card is found on the page
+  const htmlContent = await page.content();
+  console.log(htmlContent);  // This will log the HTML content of the page
+
+  const webinars = await page.evaluate(() => {
+    const webinarData = [];
+    document.querySelectorAll('.each-card').forEach(card => {
+      const title = card.querySelector('h3')?.textContent.trim();
+      const date = card.querySelector('h5')?.textContent.trim();
+      const organization = card.querySelector('h4')?.textContent.trim();
+      const description = card.querySelector('p')?.textContent.trim();
+      let image = card.querySelector('.img-wrapper')?.style.backgroundImage;
+      const link = card.querySelector('a')?.getAttribute('href');
+      
+      if (image) {
+        image = image.replace('url(', '').replace(')', '').replace(/"/g, '');
+      }
+      
+      if (title && date && organization && description && image && link) {
+        webinarData.push({
+          title,
+          date,
+          organization,
+          description,
+          image,
+          link
+        });
+      }
+    });
+    return webinarData;
+  });
+
+  console.log("Webinars:", webinars); // Debugging the fetched webinar data
+
+  await browser.close();
+  return webinars;
+};
+
+app.get('/api/webinars', async (req, res) => {
+  try {
+    const webinars = await getWebinars();
+    res.status(200).json(webinars);
+    console.log(webinars);
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching webinars', error: err });
+  }
+});
+
+
+
+
+
+
 // Start Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

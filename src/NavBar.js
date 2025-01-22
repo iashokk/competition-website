@@ -65,7 +65,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const pages = [
   { label: "Hackathons", path: "/hackathons" },
-  { label: "Paper Presentations", path: "/paper-presentations" },
+  { label: "Webinars", path: "/webinars" },
   { label: "Mentors", path: "/mentors" },
   { label: "Blog", path: "/blogs" },
 ];
