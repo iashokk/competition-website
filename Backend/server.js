@@ -161,6 +161,55 @@ scrapeMentors()
       res.status(500).json({ message: 'Error fetching mentors', error: err });
     }
   });
+
+
+//blogs
+// Function to scrape blog data
+const getBlogs = async () => {
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+
+  // Navigate to the Devpost blog page
+  await page.goto('https://info.devpost.com/blog', { waitUntil: 'networkidle0' });
+
+  // Scrape blog data
+  const blogs = await page.evaluate(() => {
+    const blogData = [];
+    document.querySelectorAll('.article-grid-item').forEach(tile => {
+      const title = tile.querySelector('.blog-heading')?.textContent.trim();
+      const description = tile.querySelector('.article-card-snippet')?.textContent.trim();
+      const category = tile.querySelector('.category-label')?.textContent.trim();
+      const image = tile.querySelector('.article-thumbnail img')?.getAttribute('src');
+      const link = tile.querySelector('a')?.getAttribute('href');
+      
+      // Ensure the data is valid
+      if (title && description && category && image && link) {
+        blogData.push({
+          title,
+          description,
+          category,
+          image: image.startsWith('//') ? `https:${image}` : image,
+          link: link.startsWith('/') ? `https://info.devpost.com${link}` : link
+        });
+      }
+    });
+    return blogData;
+  });
+
+  await browser.close();
+  return blogs;
+};
+
+// API Endpoint
+app.get('/api/blogs', async (req, res) => {
+  try {
+    const blogs = await getBlogs();
+    res.status(200).json(blogs);
+  } catch (err) {
+    console.error('Error fetching blogs:', err);
+    res.status(500).json({ message: 'Error fetching blogs', error: err.message });
+  }
+});
 // Start Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

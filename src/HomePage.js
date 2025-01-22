@@ -3,6 +3,7 @@ import { Card, Typography, Box, Button, Chip, Divider,CircularProgress } from "@
 import TourOutlinedIcon from "@mui/icons-material/TourOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import LanguageIcon from "@mui/icons-material/Language";
+import Navbar from "./NavBar";
 
 const HomePage = () => {
   const [hackathons, setHackathons] = useState([]);
@@ -44,6 +45,7 @@ const HomePage = () => {
 
   return (
     <div>
+      <Navbar/>
       <h1>Hackathons</h1>
       {hackathons.map((hackathonData, index) => (
         <Card sx={cardStyles} key={index}>
