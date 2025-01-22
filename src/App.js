@@ -5,7 +5,9 @@ import SignUp from "./SignUp";
 import SignIn from "./SignIn";
 import ProtectedRoute from "./ProtectedRoute";
 import NoSignIn from "./NoSignIn";
-
+import Homepage from "./HomePage";
+import Conferences from "./Mentors";
+import Mentors from "./Mentors";
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true); // New loading state
@@ -29,7 +31,24 @@ function App() {
             path="/"
             element={
               <ProtectedRoute isLoggedIn={isLoggedIn}>
+                
                 <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/hackathons"
+            element={
+              <ProtectedRoute isLoggedIn={isLoggedIn}>
+                <Homepage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/mentors"
+            element={
+              <ProtectedRoute isLoggedIn={isLoggedIn}>
+                <Mentors/>
               </ProtectedRoute>
             }
           />

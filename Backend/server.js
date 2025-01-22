@@ -110,6 +110,57 @@ app.get('/api/hackathons', async (req, res) => {
   }
 });
 
+
+async function scrapeMentors() {
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+
+  // Navigate to the Unstop Mentor page
+  await page.goto('https://unstop.com/mentor', { waitUntil: 'load', timeout: 0 });
+// Wait for mentor elements to load
+await page.waitForSelector('a.item.ng-star-inserted', { timeout: 10000 });
+  // Scrape mentor data
+  const mentors = await page.evaluate(() => {
+    const mentorData = [];
+
+    // Loop through each mentor item
+    document.querySelectorAll('a.item.ng-star-inserted').forEach(item => {
+      const name = item.querySelector('h3 .single-wrap')?.textContent.trim();
+      const rating = item.querySelector('h3 span')?.textContent.trim();
+      const description = item.querySelector('p.double-wrap')?.textContent.trim();
+      const profileImage = item.querySelector('.img img')?.getAttribute('src');
+      const profileLink = item.getAttribute('href');
+
+      if (name && description && profileImage && profileLink) {
+        mentorData.push({
+          name,
+          rating,
+          description,
+          profileImage,
+          profileLink: `https://unstop.com${profileLink}`,
+        });
+      }
+    });
+
+    return mentorData;
+  });
+
+  await browser.close();
+  return mentors;
+}
+
+// Run the script and log the result
+scrapeMentors()
+  .then(mentors => console.log("mentors",mentors))
+  .catch(err => console.error(err));
+  app.get('/api/mentors', async (req, res) => {
+    try {
+      const mentors = await scrapeMentors();
+      res.status(200).json(mentors);
+    } catch (err) {
+      res.status(500).json({ message: 'Error fetching mentors', error: err });
+    }
+  });
 // Start Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

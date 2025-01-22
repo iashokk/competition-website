@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, Typography, Box, Button, Chip, Divider } from "@mui/material";
+import { Card, Typography, Box, Button, Chip, Divider,CircularProgress } from "@mui/material";
 import TourOutlinedIcon from "@mui/icons-material/TourOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import LanguageIcon from "@mui/icons-material/Language";
@@ -22,8 +22,12 @@ const HomePage = () => {
   }, []);
 
   if (loading) {
-    return <Typography>Loading...</Typography>;
-  }
+      return (
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+          <CircularProgress />
+        </Box>
+      );
+    }
 
   const cardStyles = {
     display: "flex",

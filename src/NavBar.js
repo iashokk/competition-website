@@ -63,7 +63,12 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const pages = ["Hackathons", "Paper Presentations", "Blog"];
+const pages = [
+  { label: "Hackathons", path: "/hackathons" },
+  { label: "Paper Presentations", path: "/paper-presentations" },
+  { label: "Mentors", path: "/mentors" },
+  { label: "Blog", path: "/blog" },
+];
 
 function Navbar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
@@ -81,6 +86,11 @@ function Navbar() {
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
+  };
+
+  const handleNavigate = (path) => {
+    navigate(path);
+    handleCloseNavMenu(); // Close the menu after navigation
   };
 
   const handleLoginClick = () => {
@@ -105,7 +115,7 @@ function Navbar() {
             variant="h6"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
+            href="#"
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
@@ -156,7 +166,7 @@ function Navbar() {
               sx={{ display: { xs: "block", md: "none" } }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                <MenuItem key={page.label} onClick={() => handleNavigate(page.path)}>
                   <Typography
                     variant="h6"
                     fontWeight="bold"
@@ -165,7 +175,7 @@ function Navbar() {
                       fontWeight: 700,
                     }}
                   >
-                    {page}
+                    {page.label}
                   </Typography>
                 </MenuItem>
               ))}
@@ -176,7 +186,7 @@ function Navbar() {
             variant="h5"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
+            href="#"
             sx={{
               mr: 2,
               display: { xs: "flex", md: "none" },
@@ -193,8 +203,8 @@ function Navbar() {
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
-                key={page}
-                onClick={handleCloseNavMenu}
+                key={page.label}
+                onClick={() => handleNavigate(page.path)}
                 sx={{
                   my: 2,
                   color: "black",
@@ -204,7 +214,7 @@ function Navbar() {
                   fontWeight: 600,
                 }}
               >
-                {page}
+                {page.label}
               </Button>
             ))}
           </Box>
@@ -231,5 +241,6 @@ function Navbar() {
     </AppBar>
   );
 }
+
 
 export default Navbar;
