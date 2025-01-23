@@ -9,6 +9,7 @@ import Homepage from "./HomePage";
 import Mentors from "./Mentors";
 import Blogs from "./Blogs";
 import Webinar from "./Webinar";
+import Internships from "./Internships";
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true); // New loading state
@@ -66,6 +67,14 @@ function App() {
             element={
               <ProtectedRoute isLoggedIn={isLoggedIn}>
                 <Mentors/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/internships"
+            element={
+              <ProtectedRoute isLoggedIn={isLoggedIn}>
+                <Internships />
               </ProtectedRoute>
             }
           />

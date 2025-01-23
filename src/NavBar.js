@@ -67,6 +67,7 @@ const pages = [
   { label: "Hackathons", path: "/hackathons" },
   { label: "Webinars", path: "/webinars" },
   { label: "Mentors", path: "/mentors" },
+  { label: "Internships", path: "/internships" },
   { label: "Blog", path: "/blogs" },
 ];
 
