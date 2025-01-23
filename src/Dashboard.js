@@ -4,11 +4,11 @@ import NavBar from "./NavBar";
 import { Grid, Typography, Card, CardContent } from "@mui/material";
 
 const cardData = [
-  { title: "Internships", description: "Gain Practical Experience", color: "#B5EAEA", route: "/internships" },
+  { title: "Hackathons", description: "Compete and innovate", color: "#B5EAEA", route: "/hackathons" },
   { title: "Mentorships", description: "Guidance From Top Mentors", color: "#FFBCBC", route: "/mentors" },
-  { title: "Jobs", description: "Explore Diverse Careers", color: "#A0D2EB", route: "/jobs" },
-  { title: "Practice", description: "Refine Skills Daily", color: "#D4A5A5", route: "/practice" },
-  { title: "Competitions", description: "Battle For Excellence", color: "#FFF1C1", route: "/competitions" },
+  { title: "Internships", description: "Explore Diverse Careers", color: "#A0D2EB", route: "/internships" },
+  { title: "Blogs", description: "Read and share insights", color: "#D4A5A5", route: "/blogs" },
+  { title: "Webinars", description: "Learn from experts", color: "#FFF1C1", route: "/webinars" },
   { title: "More", description: "Explore More Opportunities", color: "#E2C2B9", route: "/more" },
 ];
 
@@ -37,6 +37,7 @@ const backgroundWrapperStyles = {
   backgroundColor: 'white',
   backgroundSize: 'cover',
   backgroundImage: 'url(/Background.png)',
+  backgroundPosition: 'center',
 };
 
 function Dashboard() {
