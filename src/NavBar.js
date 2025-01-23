@@ -127,7 +127,7 @@ function Navbar() {
               textDecoration: "none",
             }}
           >
-            LOGO
+            ICCIS
           </Typography>
           <Search>
             <SearchIconWrapper>
