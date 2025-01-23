@@ -115,7 +115,7 @@ const SignIn = ({ setIsLoggedIn }) => {
           <DottedLine fontSize="large" />
         </DottedBackground>
         <Card variant="outlined">
-          Logo
+          ICCIS
           <Typography
             component="h1"
             variant="h4"

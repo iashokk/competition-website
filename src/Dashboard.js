@@ -34,8 +34,9 @@ const backgroundWrapperStyles = {
   left: 0,
   right: 0,
   bottom: 0,
-  backgroundColor: "#f9f9f9",
-  zIndex: -1, // Ensures the background stays behind all other content
+  backgroundColor: 'white',
+  backgroundSize: 'cover',
+  backgroundImage: 'url(/Background.png)',
 };
 
 function Dashboard() {
