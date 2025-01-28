@@ -26,8 +26,10 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true },
   password: { type: String, required: true },
   name: { type: String, required: true },
+  lastEmailSent: { type: Date, default: null }, // Tracks the last email sent date
 });
 const User = mongoose.model("User", userSchema);
+
 
 // Register Route (Hash password before saving)
 app.post("/register", async (req, res) => {
@@ -61,6 +63,92 @@ app.post("/login", async (req, res) => {
 const launchBrowser = async () => {
   return puppeteer.launch({ headless: true });
 };
+
+
+//mail notification
+const nodemailer = require("nodemailer");
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "iccis2025@gmail.com",
+    pass: "regr cctb lstd viiu",    
+  },
+});
+
+const sendEmailWithHackathons = async (email, hackathons) => {
+  const topHackathons = hackathons.slice(0, 2); // Get the top 2 hackathons
+  const htmlContent = `
+    <h1>Top Hackathons</h1>
+    <ul>
+      ${topHackathons
+        .map(
+          (hackathon) => `
+        <li>
+          <strong>${hackathon.title}</strong><br />
+          Status: ${hackathon.status}<br />
+          Host: ${hackathon.host}<br />
+          Date: ${hackathon.date}<br />
+          Prize: ${hackathon.prize}<br />
+          Location: ${hackathon.location}<br />
+          <a href="${hackathon.link}">View Details</a>
+        </li>
+      `
+        )
+        .join("")}
+    </ul>
+  `;
+
+  const mailOptions = {
+    from: '"Hackathon Hub" <iccis@gmail.com>',
+    to: email,
+    subject: "Top Hackathons for You",
+    html: htmlContent,
+  };
+
+  await transporter.sendMail(mailOptions);
+  console.log("Email sent to", email);
+};
+
+app.post("/send-hackathon-emails", async (req, res) => {
+  try {
+    const users = await User.find(); // Get all registered users
+    const hackathons = await getHackathons(); // Fetch hackathons using scraper
+
+    const currentDate = new Date();
+
+    for (const user of users) {
+      // Check if 3 days have passed since the last email
+      if (!user.lastEmailSent || (currentDate - new Date(user.lastEmailSent)) / (1000 * 60 * 60 * 24) >= 3) {
+        await sendEmailWithHackathons(user.email, hackathons); // Send email
+        user.lastEmailSent = currentDate; // Update timestamp
+        await user.save(); // Save the updated timestamp
+      }
+    }
+
+    res.status(200).json({ message: "Emails sent to eligible users" });
+  } catch (err) {
+    console.error("Error sending emails:", err);
+    res.status(500).json({ message: "Error sending emails", error: err });
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Get Hackathons
 const getHackathons = async () => {
