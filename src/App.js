@@ -8,7 +8,6 @@ import NoSignIn from "./NoSignIn";
 import Homepage from "./HomePage";
 import Mentors from "./Mentors";
 import Blogs from "./Blogs";
-import Webinar from "./Webinar";
 import Internships from "./Internships";
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -54,14 +53,7 @@ function App() {
               </ProtectedRoute>
             }
           />
-           <Route
-            path="/webinars"
-            element={
-              <ProtectedRoute isLoggedIn={isLoggedIn}>
-                <Webinar/>
-              </ProtectedRoute>
-            }
-          />
+          
           <Route
             path="/mentors"
             element={

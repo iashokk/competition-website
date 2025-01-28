@@ -8,8 +8,6 @@ const cardData = [
   { title: "Mentorships", description: "Guidance From Top Mentors", color: "#FFBCBC", route: "/mentors" },
   { title: "Internships", description: "Explore Diverse Careers", color: "#A0D2EB", route: "/internships" },
   { title: "Blogs", description: "Read and share insights", color: "#D4A5A5", route: "/blogs" },
-  { title: "Webinars", description: "Learn from experts", color: "#FFF1C1", route: "/webinars" },
-  { title: "More", description: "Explore More Opportunities", color: "#E2C2B9", route: "/more" },
 ];
 
 const cardStyles = {
@@ -63,9 +61,9 @@ function Dashboard() {
             </Typography>
           </Grid>
           {cardData.map((card, index) => (
-            <Grid item xs={12} sm={6} md={4} key={index}>
+            <Grid item xs={12} sm={8} md={6} key={index} >
               <Card
-                style={{ ...cardStyles.card, backgroundColor: card.color }}
+                style={{ ...cardStyles.card, backgroundColor: card.color , marginLeft:"10px" }}
                 onClick={() => handleCardClick(card.route)}
               >
                 <CardContent style={cardStyles.cardContent}>

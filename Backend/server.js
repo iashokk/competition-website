@@ -241,59 +241,7 @@ app.get("/api/internships", async (req, res) => {
   }
 });
 
-// Get Webinars
-const getWebinars = async () => {
-  const browser = await launchBrowser();
-  const page = await browser.newPage();
-  await page.goto("https://www.techgig.com/webinar", { waitUntil: "networkidle2", timeout: 60000 });
 
-  try {
-    await page.waitForSelector(".webinar-box", { timeout: 30000 });
-
-    const webinars = await page.evaluate(() => {
-      const webinarData = [];
-      document.querySelectorAll(".webinar-box").forEach((webinar) => {
-        const title = webinar.querySelector("h4 a")?.textContent.trim();
-        const speaker = webinar.querySelector(".webinar-author-info h5")?.textContent.trim();
-        const company = webinar.querySelector(".webinar-author-info .company")?.textContent.trim();
-        const duration = webinar.querySelector(".video-time")?.textContent.trim();
-        const postedAgo = webinar.querySelector(".footer .block:first-child")?.textContent.trim();
-        const views = webinar.querySelector(".footer .block:nth-child(2)")?.textContent.trim();
-        const bannerImage = webinar.querySelector(".banner-bg")?.style.backgroundImage.match(/url\(["'](.+)["']\)/)?.[1];
-        const link = webinar.querySelector("h4 a")?.getAttribute("href");
-        if (title && speaker && duration && postedAgo && views && link && bannerImage) {
-          webinarData.push({
-            title,
-            speaker,
-            company,
-            duration,
-            postedAgo,
-            views,
-            link: `https://www.techgig.com${link}`,
-            bannerImage,
-          });
-        }
-      });
-      return webinarData;
-    });
-
-    await browser.close();
-    return webinars;
-  } catch (err) {
-    console.error("Error scraping webinars:", err);
-    await browser.close();
-    return [];
-  }
-};
-
-app.get("/api/webinars", async (req, res) => {
-  try {
-    const webinars = await getWebinars();
-    res.status(200).json(webinars);
-  } catch (err) {
-    res.status(500).json({ message: "Error fetching webinars", error: err.message });
-  }
-});
 
 // Start Server
 const PORT = process.env.PORT || 5000;
