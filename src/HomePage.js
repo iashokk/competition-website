@@ -4,7 +4,7 @@ import TourOutlinedIcon from "@mui/icons-material/TourOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import LanguageIcon from "@mui/icons-material/Language";
 import Navbar from "./NavBar";
-
+import Chatbot from "./Chatbot";
 const HomePage = () => {
   const [hackathons, setHackathons] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -136,6 +136,7 @@ const HomePage = () => {
           </Box>
         </Card>
       ))}
+      <Chatbot />
     </div>
   );
 };

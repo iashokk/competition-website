@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import NavBar from "./NavBar";
 import { Grid, Typography, Card, CardContent } from "@mui/material";
-
+import Chatbot from "./Chatbot";
 const cardData = [
   { title: "Hackathons", description: "Compete and innovate", color: "#B5EAEA", route: "/hackathons" },
   { title: "Mentorships", description: "Guidance From Top Mentors", color: "#FFBCBC", route: "/mentors" },
@@ -79,6 +79,7 @@ function Dashboard() {
           ))}
         </Grid>
       </div>
+      <Chatbot />
     </>
   );
 }

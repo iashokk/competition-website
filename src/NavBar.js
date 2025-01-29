@@ -73,6 +73,8 @@ const pages = [
 function Navbar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredResults, setFilteredResults] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -107,6 +109,17 @@ function Navbar() {
     navigate("/signin");
   };
 
+  useEffect(() => {
+    if (searchQuery.trim() === "") {
+      setFilteredResults([]);
+    } else {
+      setFilteredResults(
+        pages.filter((page) =>
+          page.label.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      );
+    }
+  }, [searchQuery]);
   return (
     <AppBar position="static">
       <Container maxWidth="xl" sx={{ backgroundColor: "white" }}>
@@ -128,78 +141,43 @@ function Navbar() {
           >
             ICCIS
           </Typography>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon sx={{ color: "black" }} />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              sx={{ color: "black" }}
-              inputProps={{ "aria-label": "search" }}
-            />
-          </Search>
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="black"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{ display: { xs: "block", md: "none" } }}
-            >
-              {pages.map((page) => (
-                <MenuItem key={page.label} onClick={() => handleNavigate(page.path)}>
-                  <Typography
-                    variant="h6"
-                    fontWeight="bold"
-                    sx={{
-                      textAlign: "center",
-                      fontWeight: 700,
-                    }}
-                  >
-                    {page.label}
-                  </Typography>
-                </MenuItem>
-              ))}
-            </Menu>
+
+          {/* Search Box */}
+          <Box sx={{ position: "relative" }}>
+            <Search>
+              <SearchIconWrapper>
+                <SearchIcon sx={{ color: "black" }} />
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder="Search…"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                sx={{ color: "black" }}
+                inputProps={{ "aria-label": "search" }}
+              />
+            </Search>
+            {/* Display Search Results */}
+            {filteredResults.length > 0 && (
+              <Box
+                sx={{
+                  position: "absolute",
+                  backgroundColor: "blue",
+                  boxShadow: "0px 2px 5px rgba(0,0,0,0.2)",
+                  zIndex: 10,
+                  width: "100%",
+                  borderRadius: 1,
+                  mt: 1,
+                }}
+              >
+                {filteredResults.map((result) => (
+                  <MenuItem key={result.label} onClick={() => handleNavigate(result.path)}>
+                    {result.label}
+                  </MenuItem>
+                ))}
+              </Box>
+            )}
           </Box>
-          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href="#"
-            sx={{
-              mr: 2,
-              display: { xs: "flex", md: "none" },
-              flexGrow: 1,
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "black",
-              textDecoration: "none",
-            }}
-          >
-            ICCIS
-          </Typography>
+
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
@@ -218,18 +196,19 @@ function Navbar() {
               </Button>
             ))}
           </Box>
+
           <Box sx={{ flexGrow: 0 }}>
             <Stack direction="row" spacing={2}>
               {isLoggedIn ? (
-                <Button variant="outlined" onClick={handleLogoutClick}>
+                <Button variant="outlined" onClick={() => navigate("/signin")}>
                   Log out
                 </Button>
               ) : (
                 <>
-                  <Button variant="outlined" onClick={handleLoginClick}>
+                  <Button variant="outlined" onClick={() => navigate("/signin")}>
                     Log in
                   </Button>
-                  <Button variant="contained" onClick={handleSignUpClick}>
+                  <Button variant="contained" onClick={() => navigate("/signup")}>
                     Sign up
                   </Button>
                 </>
