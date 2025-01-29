@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const cron = require("node-cron");
 const bcrypt = require("bcryptjs");
 const puppeteer = require("puppeteer");
 require("dotenv").config();
@@ -76,39 +77,71 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const sendEmailWithHackathons = async (email, hackathons) => {
-  const topHackathons = hackathons.slice(0, 2); // Get the top 2 hackathons
-  const htmlContent = `
-    <h1>Top Hackathons</h1>
-    <ul>
-      ${topHackathons
-        .map(
-          (hackathon) => `
-        <li>
-          <strong>${hackathon.title}</strong><br />
-          Status: ${hackathon.status}<br />
-          Host: ${hackathon.host}<br />
-          Date: ${hackathon.date}<br />
-          Prize: ${hackathon.prize}<br />
-          Location: ${hackathon.location}<br />
-          <a href="${hackathon.link}">View Details</a>
-        </li>
-      `
-        )
-        .join("")}
-    </ul>
-  `;
+const sendHackathonEmails = async () => {
+  try {
+    // 1. Fetch all registered users from MongoDB
+    const users = await User.find({}, "email"); // Get only email field
 
-  const mailOptions = {
-    from: '"Hackathon Hub" <iccis@gmail.com>',
-    to: email,
-    subject: "Top Hackathons for You",
-    html: htmlContent,
-  };
+    // 2. Scrape or Fetch Hackathons (Ensure `getHackathons()` function exists)
+    const hackathons = await getHackathons();
+    const topHackathons = hackathons.slice(0, 2); // Pick top 2
 
-  await transporter.sendMail(mailOptions);
-  console.log("Email sent to", email);
+    // 3. Email Configuration
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "iccis2025@gmail.com",
+        pass: "regr cctb lstd viiu", // Use an app-specific password
+      },
+    });
+
+    // 4. Send an email to each registered user
+    for (const user of users) {
+      const mailOptions = {
+        from: "iccis2025@gmail.com",
+        to: user.email,
+        subject: "🔥 Top 2 Upcoming Hackathons!",
+        html: `
+          <h2>🚀 Check out these exciting hackathons!</h2>
+          <ul>
+            ${topHackathons
+              .map(
+                (hackathon) => `
+                <li>
+                  <strong>${hackathon.title}</strong><br>
+                  <b>Status:</b> ${hackathon.status}<br>
+                  <b>Host:</b> ${hackathon.host}<br>
+                  <b>Date:</b> ${hackathon.date}<br>
+                  <b>Prize:</b> ${hackathon.prize}<br>
+                  <b>Participants:</b> ${hackathon.participants}<br>
+                  <b>Location:</b> ${hackathon.location}<br>
+                  <b>More Info:</b> <a href="${hackathon.link}">${hackathon.link}</a>
+                </li>
+              `
+              )
+              .join("")}
+          </ul>
+        `,
+      };
+
+      await transporter.sendMail(mailOptions);
+      console.log(`📧 Email sent to ${user.email}`);
+    }
+  } catch (err) {
+    console.error("❌ Error sending emails:", err);
+  }
 };
+// Schedule this function to run every 3 days at 10 AM
+// cron.schedule("0 10 */3 * *", () => {
+//   console.log("⏳ Sending hackathon emails...");
+//   sendHackathonEmails();
+// });
+
+cron.schedule("*/3 * * * * ", () => { 
+  console.log("⏳ Sending hackathon emails (test mode)...");
+  sendHackathonEmails();
+});
+
 
 app.post("/send-hackathon-emails", async (req, res) => {
   try {
