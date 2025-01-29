@@ -11,7 +11,10 @@ const ChatBot = () => {
     try {
       setLoading(true);
       const res = await axios.get(`http://localhost:5000/api/${endpoint}`);
-      setResponse(JSON.stringify(res.data, null, 2));
+      const textResponse = res.data
+      .map((item, index) => `${index + 1}. ${item.title || item.name}`)
+      .join("\n");
+      setResponse(textResponse || "No results found");
     } catch (error) {
       setResponse("Error fetching data");
     } finally {
